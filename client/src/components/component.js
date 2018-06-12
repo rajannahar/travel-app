@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Select from './select';
 
 class Client extends Component {
 
@@ -10,7 +11,6 @@ class Client extends Component {
   }
 
   componentDidMount() {
-      console.log("did mount");
       
       fetch('/api/travel')
       .then(res => res.json()
@@ -23,13 +23,20 @@ class Client extends Component {
 
   render() {
 
-    console.log("test");
     console.log(this.state.hotels);
+    const { hotels } = this.state.hotels;
+    console.log("111 ", hotels);
+
 
     return (
       <div className="client">
 
         <div className="container">
+
+            <div className="row">
+                <Select hotels={this.state.hotels} />
+            </div>
+
             <div className="row">
 
                 {this.state.hotels.map(hotel => 
