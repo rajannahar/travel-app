@@ -15,7 +15,9 @@ class Select extends Component {
 
 
   render(props) {
-      console.log("props ", this.props);
+    if (this.props.length) {
+        console.log("props ", this.props);
+    }
 
     return (
       
