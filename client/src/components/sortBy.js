@@ -1,27 +1,24 @@
 import React, { Component } from 'react';
-import {Row, Input} from 'react-materialize'
-// import $ from 'jquery';
-class Select extends Component {
+import {Row, Input} from 'react-materialize';
+class SortBy extends Component {
 
     constructor(props) {
         super(props);    
     }
 
     componentDidMount() {
-        console.log("select mount");
+        console.log("SortBy mount");
     }
 
-
-
     render(props) {
-        if (this.props.hotels.length) {
-            console.log("props ", this.props);
-        }
+        // if (this.props.hotels.length) {
+        //     console.log("props ", this.props);
+        // }
 
         return (
-
             <Row>
-                <Input s={12} type='select' label="Sort by:" defaultValue='1' onChange={this.props.handleChange}>
+                <Input s={12} type='select' defaultValue='' onChange={this.props.handleSort} >
+                    <option value="">Sort by:</option>
                     <option value="1">Distance - low to high</option>
                     <option value="2">Distance - high to low</option>
                     <option value="3">Stars - low to high</option>
@@ -32,11 +29,8 @@ class Select extends Component {
                     <option value="8">User Rating - high to low</option>
                 </Input>
             </Row>
-            
-            
-            
         );
     }
 }
 
-export default Select;
+export default SortBy;
