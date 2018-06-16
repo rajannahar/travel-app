@@ -7,7 +7,7 @@ class SortBy extends Component {
     }
 
     componentDidMount() {
-        console.log("SortBy mount");
+        //console.log("SortBy mount");
     }
 
     render(props) {

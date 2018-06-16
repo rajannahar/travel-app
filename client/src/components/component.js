@@ -3,12 +3,15 @@ import {Card, Col, Row, Preloader} from 'react-materialize';
 import SortBy from './sortBy';
 import FilterName from './filterName';
 
+import $ from 'jquery';
+
 class Client extends Component {
 
   constructor() {
       super();
       this.state = {
-          hotels: []
+          hotels: [], 
+          searchName: ''
       }
   }
 
@@ -117,22 +120,19 @@ class Client extends Component {
     }
 
     handleFilterName = (event) => {
-        console.log(event.target.value);
-        let hotelNameEntry = event.target.value;
 
-        let hotelNames = [...this.state.hotels];
-        
-        hotelNames.filter((hotelNameEntry) => {
-            //hotelNameEntry === hotelNames.Name;
-            return hotelNameEntry
-        });
+        let val = event.target.value.toLowerCase();
 
         this.setState({
-            hotels: hotelNames
+            searchName: val
         });
-
-        console.log("qwerty ",hotelNameEntry+" - ");
                         
+    };
+
+    searchingName = (searchName) => {
+        return function(x) {
+            return x.Name.toLowerCase().includes(searchName) || !searchName;
+        }
     };
 
 
@@ -140,7 +140,9 @@ class Client extends Component {
 
     if (this.state.hotels.length) {
         console.log("load");
-        // let newObj = [...this.state.hotels]
+
+        const {hotels, searchName} = this.state;
+
         return (
             <div className="client">
                 <div className="container">
@@ -154,28 +156,8 @@ class Client extends Component {
                     </Row>
 
                     <Row>
-        
-                        {/* {{this.state.hotels.filter(function(hotel) { return hotel.Stars === 1; })
-                        .map(hotel =>} */}
-
-                        {/* {{this.state.hotels && 
-                        this.state.hotels.map(hotel =>} */}
-
-                        {/* {{this.state.hotels &&
-                        this.state.hotels.sort(function(hotel) { return hotel.Stars === 1; })
-                        .map(hotel =>} */}
-
-                        {/* {var obj = [...this.state.data];
-                        obj.sort((a,b) => a.timeM - b.timeM);
-                        obj.map((item, i) => (<div key={i}> {item.matchID}  
-                                            {item.timeM} {item.description}</div>))} */}
-
                         
-                        {
-                        
-                        this.state.hotels &&
-                        this.state.hotels
-                        .map(hotel =>
+                        { hotels && hotels.filter(this.searchingName(searchName)).map(hotel =>
                         
                             <Col m={6} s={12} key={hotel.EstablishmentId}>
                                 <Card>

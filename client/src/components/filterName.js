@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Row, Input} from 'react-materialize';
+import {Row, Input, Button} from 'react-materialize';
 class FilterName extends Component {
 
     constructor(props) {
@@ -7,19 +7,20 @@ class FilterName extends Component {
     }
 
     componentDidMount() {
-        console.log("FilterName mount");
+        //console.log("FilterName mount");
     }
 
     render(props) {
         // if (this.props.hotels.length) {
-        //     console.log("props ", this.props);
+            console.log("props ", this.props);
         // }
 
         return (
             <Row>
                 
-                <Input placeholder="Filter by name" s={6} onChange={this.props.handleFilterName} />
-                
+                <Input className="filterName" placeholder="Filter by name" s={6} onChange={this.props.handleFilterName} />
+
+
             </Row>
         );
     }
