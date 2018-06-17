@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import {Card, Col, Row, Preloader} from 'react-materialize';
 import SortBy from './sortBy';
 import FilterName from './filterName';
-
+import FilterStars from './filterStars';
 import $ from 'jquery';
 
 class Client extends Component {
 
-  constructor() {
-      super();
-      this.state = {
-          hotels: [], 
-          searchName: ''
-      }
-  }
+    constructor() {
+        super();
+        this.state = {
+            hotels: [], 
+        }
+        this.baseState = this.state
+    }
+
 
     apidata = () => {
         fetch('/api/travel')
@@ -31,18 +32,13 @@ class Client extends Component {
         this.apidata();
     }
 
-
-
     handleSort = (event) => {
-        // this.setState({value: event.target.value});
 
         let newObj = [...this.state.hotels];
-        console.log("...... ",newObj);
-        console.log(event.target.value);
-
+        
         switch(event.target.value) {
             case("1"):
-                console.log("Distance - low to high");
+                // console.log("Distance - low to high");
                 newObj.sort((a, b) => a.Distance - b.Distance);
                 this.setState({
                     ...this.state,
@@ -51,7 +47,7 @@ class Client extends Component {
                 break;
             
             case("2"):
-                console.log("Distance - high to low");
+                // console.log("Distance - high to low");
                 newObj.sort((a, b) => b.Distance - a.Distance);
                 this.setState({
                     ...this.state,
@@ -60,7 +56,7 @@ class Client extends Component {
                 break;
             
             case("3"):
-                console.log("Stars - low to high");
+                // console.log("Stars - low to high");
                 newObj.sort((a, b) => a.Stars - b.Stars);
                 this.setState({
                     ...this.state,
@@ -69,7 +65,7 @@ class Client extends Component {
                 break;
                 
             case("4"):
-                console.log("Stars - high to low");
+                // console.log("Stars - high to low");
                 newObj.sort((a, b) => b.Stars - a.Stars);
                 this.setState({
                     ...this.state,
@@ -78,7 +74,7 @@ class Client extends Component {
                 break;
             
             case("5"):
-                console.log("Min cost - low to high");
+                // console.log("Min cost - low to high");
                 newObj.sort((a, b) => a.MinCost - b.MinCost);
                 this.setState({
                     ...this.state,
@@ -87,7 +83,7 @@ class Client extends Component {
                 break;
 
             case("6"):
-                console.log("Min cost - high to low");
+                // console.log("Min cost - high to low");
                 newObj.sort((a, b) => b.MinCost - a.MinCost);
                 this.setState({
                     ...this.state,
@@ -96,7 +92,7 @@ class Client extends Component {
                 break;
 
             case("7"):
-                console.log("User rating - low to high");
+                // console.log("User rating - low to high");
                 newObj.sort((a, b) => a.UserRating - b.UserRating);
                 this.setState({
                     ...this.state,
@@ -105,7 +101,7 @@ class Client extends Component {
                 break;
 
             case("8"):
-                console.log("User rating - high to low");
+                // console.log("User rating - high to low");
                 newObj.sort((a, b) => b.UserRating - a.UserRating);
                 this.setState({
                     ...this.state,
@@ -114,34 +110,46 @@ class Client extends Component {
                 break;
             
             default:
-                console.log("default");
+                // console.log("default");
                 this.apidata();
         }
     }
 
-    handleFilterName = (event) => {
+    resetData = () => {
+        // this.setState(this.baseState);
+        $(".filterName").val("");
+        this.apidata();
+    }
 
-        let val = event.target.value.toLowerCase();
+    handleFilterName = (event) => {
+        let nameInput = $('.filterName').val().toLowerCase();
+        let newState = [...this.state.hotels]
+        newState = newState.filter(hotel => hotel.Name.toLowerCase().includes(nameInput));
 
         this.setState({
-            searchName: val
+            hotels: newState,
         });
                         
     };
 
-    searchingName = (searchName) => {
-        return function(x) {
-            return x.Name.toLowerCase().includes(searchName) || !searchName;
-        }
+    handleFilterStars = (event) => {
+        let starInput = parseInt($(".filterStars input").val(), 10);
+
+        let newState = [...this.state.hotels]
+        newState = newState.filter(hotel => hotel.Stars === starInput);
+
+        this.setState({
+            hotels: newState,
+        });
     };
 
-
+    
   render() {
 
     if (this.state.hotels.length) {
         console.log("load");
 
-        const {hotels, searchName} = this.state;
+        const {hotels} = this.state;
 
         return (
             <div className="client">
@@ -152,12 +160,16 @@ class Client extends Component {
                     </Row>
 
                     <Row>
-                        <FilterName handleFilterName={this.handleFilterName.bind(this)} />
+                        <FilterName handleFilterName={this.handleFilterName.bind(this)} resetData={this.resetData.bind(this)} />
+                    </Row>
+
+                    <Row>
+                        <FilterStars handleFilterStars={this.handleFilterStars.bind(this)} />
                     </Row>
 
                     <Row>
                         
-                        { hotels && hotels.filter(this.searchingName(searchName)).map(hotel =>
+                        { hotels && hotels.map(hotel =>
                         
                             <Col m={6} s={12} key={hotel.EstablishmentId}>
                                 <Card>

@@ -2,22 +2,13 @@ import React, { Component } from 'react';
 import {Row, Input} from 'react-materialize';
 class SortBy extends Component {
 
-    constructor(props) {
-        super(props);    
-    }
-
-    componentDidMount() {
-        //console.log("SortBy mount");
-    }
-
     render(props) {
-        // if (this.props.hotels.length) {
-        //     console.log("props ", this.props);
-        // }
+       
+        let {handleSort} = this.props;
 
         return (
             <Row>
-                <Input s={12} type='select' defaultValue='' onChange={this.props.handleSort} >
+                <Input s={12} type='select' defaultValue='' onChange={handleSort} >
                     <option value="">Sort by:</option>
                     <option value="1">Distance - low to high</option>
                     <option value="2">Distance - high to low</option>
