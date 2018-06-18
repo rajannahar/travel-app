@@ -9,11 +9,11 @@ class FilterName extends Component {
         return (
             <Row>
                 
-                <Input className="filterName" placeholder="Filter by name" s={6} />                
+                <Input className="filterName" placeholder="Filter by name" s={6} onChange={handleFilterName} />                
 
-                <Button waves='light' type="submit" s={3} onClick={handleFilterName}>
+                {/* <Button waves='light' type="submit" s={3} onClick={handleFilterName}>
                     <Icon left>cloud</Icon>Search
-                </Button>
+                </Button> */}
 
                 <Button waves='light' type="submit" s={3} onClick={resetData}>Reset</Button>
 

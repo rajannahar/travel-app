@@ -5,6 +5,8 @@ import FilterName from './filterName';
 import FilterStars from './filterStars';
 import $ from 'jquery';
 
+let initialState = {};
+
 class Client extends Component {
 
     constructor() {
@@ -12,9 +14,7 @@ class Client extends Component {
         this.state = {
             hotels: [], 
         }
-        this.baseState = this.state
     }
-
 
     apidata = () => {
         fetch('/api/travel')
@@ -25,6 +25,8 @@ class Client extends Component {
                 ...this.state,
                 hotels:hotelData
             });
+
+            initialState = {...this.state};
         }));
     };
 
@@ -116,9 +118,11 @@ class Client extends Component {
     }
 
     resetData = () => {
-        // this.setState(this.baseState);
         $(".filterName").val("");
-        this.apidata();
+        console.log("reset");
+        this.setState({
+            ...initialState
+        });
     }
 
     handleFilterName = (event) => {
