@@ -11,10 +11,10 @@ class Client extends Component {
         super();
         this.state = {
             hotels: [], 
+            sortBy: '',
+            filterName: ''
         }
-        this.baseState = this.state
     }
-
 
     apidata = () => {
         fetch('/api/travel')
@@ -34,16 +34,21 @@ class Client extends Component {
 
     handleSort = (event) => {
 
+        this.setState({
+            sortBy: event.target.value
+        })
+
         let newObj = [...this.state.hotels];
         
-        switch(event.target.value) {
+        switch(this.state.sortBy) {
             case("1"):
-                // console.log("Distance - low to high");
-                newObj.sort((a, b) => a.Distance - b.Distance);
-                this.setState({
-                    ...this.state,
-                    hotels: newObj
-                });
+                console.log("Distance - low to high", event.target.value);
+                // newObj.sort((a, b) => a.Distance - b.Distance);
+                // this.setState({
+                //     ...this.state,
+                //     hotels: newObj
+                // });
+                return newObj.sort((a, b) => a.Distance - b.Distance);
                 break;
             
             case("2"):
@@ -110,24 +115,28 @@ class Client extends Component {
                 break;
             
             default:
-                // console.log("default");
-                this.apidata();
+                console.log("default");
+                // this.apidata();
         }
+
+        this.test();
+    }
+
+    test = () => {
+        console.log("..... ",this.state.sortBy);
     }
 
     resetData = () => {
-        // this.setState(this.baseState);
+        this.setState({
+            filterName: ''
+        });
         $(".filterName").val("");
-        this.apidata();
     }
 
     handleFilterName = (event) => {
-        let nameInput = $('.filterName').val().toLowerCase();
-        let newState = [...this.state.hotels]
-        newState = newState.filter(hotel => hotel.Name.toLowerCase().includes(nameInput));
-
+        let nameInput = event.target.value;
         this.setState({
-            hotels: newState,
+            filterName: nameInput
         });
                         
     };
@@ -146,30 +155,43 @@ class Client extends Component {
     
   render() {
 
-    if (this.state.hotels.length) {
+   // if (this.state.hotels.length) {
         console.log("load");
 
-        const {hotels} = this.state;
+        let a, b;
+        const {hotels, sortBy} = this.state;
+
+        let hotelsToRender = hotels ? hotels.filter(hotel => 
+            hotel.Name.toLowerCase().includes(
+                this.state.filterName.toLowerCase())
+        ) : [];
+
+        hotelsToRender = sortBy ? hotelsToRender.sort((a, b)) : hotelsToRender; 
 
         return (
+            
             <div className="client">
+            
+                
+            {this.state.hotels.length ? 
                 <div className="container">
-        
+
                     <Row>
-                        <SortBy handleSort={this.handleSort.bind(this)} />
+                        <SortBy 
+                            handleSort={this.handleSort.bind(this)}
+                        />
                     </Row>
 
                     <Row>
-                        <FilterName handleFilterName={this.handleFilterName.bind(this)} resetData={this.resetData.bind(this)} />
+                        <FilterName 
+                            handleFilterName={this.handleFilterName.bind(this)} 
+                            resetData={this.resetData.bind(this)} 
+                        />
                     </Row>
 
                     <Row>
-                        <FilterStars handleFilterStars={this.handleFilterStars.bind(this)} />
-                    </Row>
-
-                    <Row>
-                        
-                        { hotels && hotels.map(hotel =>
+                            
+                        { hotelsToRender.map(hotel =>
                         
                             <Col m={6} s={12} key={hotel.EstablishmentId}>
                                 <Card>
@@ -189,24 +211,25 @@ class Client extends Component {
                                     </div>
                                 </Card>
                             </Col>
-        
+                            
                         )}
-                
+
                     </Row>
                 </div>
+
+                    :  <div className="container">
+                        <Row>
+                            <Col s={12}>
+                                <Preloader flashing size='big'/>
+                            </Col>
+                        </Row> 
+                    </div>
+                }
+
             </div>
+
         );
-    } else {
-        return (
-            <div className="container">
-                <Row>
-                    <Col s={12}>
-                        <Preloader flashing size='big'/>
-                    </Col>
-                </Row>
-            </div>
-        );
-    }
+    
 
   }
 }
