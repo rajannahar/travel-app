@@ -5,6 +5,8 @@ import FilterName from './filterName';
 import FilterStars from './filterStars';
 import $ from 'jquery';
 
+let initialState = {};
+
 class Client extends Component {
 
     constructor() {
@@ -25,6 +27,8 @@ class Client extends Component {
                 ...this.state,
                 hotels:hotelData
             });
+
+            initialState = {...this.state};
         }));
     };
 
