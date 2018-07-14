@@ -7,7 +7,7 @@ const port = 5000;
 const data = require('./data/hotels.json');
 
 // app.use(cors());
-app.get('/api/travel', (reqeust, response) => {
+app.get('/api', (reqeust, response) => {
     response.json(data);
 })
 

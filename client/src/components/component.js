@@ -19,7 +19,7 @@ class Client extends Component {
     }
 
     apidata = () => {
-        fetch('/api/travel')
+        fetch('/api')
         .then(res => res.json()
         .then(data => {
             const hotelData = data.Establishments;
